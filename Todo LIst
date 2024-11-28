@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- CSS styles to design the page -->
+  <style>
+    /* Basic font and padding for the body */
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Style for the input box */
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    /* Style for the button */
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Style for the unordered list to display tasks */
+    ul {
+      margin-top: 20px;
+      list-style: none; /* Remove bullet points */
+      padding: 0;
+    }
+
+    /* Style for each task item in the list */
+    li {
+      display: flex; /* Align text and delete button side by side */
+      justify-content: space-between; /* Push text and button to opposite ends */
+      font-size: 18px;
+      margin: 5px 0; /* Space between tasks */
+      padding: 5px; /* Inner padding inside the task item */
+      border: 1px solid #ddd; /* Light border around task item */
+      border-radius: 5px; /* Rounded corners */
+      width: 50%; /* Center-align by limiting the width */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Style for the delete button */
+    .delete-btn {
+      background-color: red; /* Red background */
+      color: white; /* White text color */
+      border: none; /* No border */
+      padding: 5px 10px; /* Inner spacing for the button */
+      cursor: pointer; /* Pointer cursor on hover */
+      border-radius: 3px; /* Rounded corners */
+    }
+
+    /* Hover effect for delete button */
+    .delete-btn:hover {
+      background-color: darkred; /* Darker shade of red when hovering */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Main title of the application -->
+  <h1>TO-DO List</h1>
+
+  <!-- Input box for entering tasks -->
+  <input type="text" id="taskInput" placeholder="Add one more list">
+  
+  <!-- Add button to add tasks -->
+  <button onclick="addTask()">+</button>
+  
+  <!-- Unordered list to display all tasks -->
+  <ul id="taskList"></ul>
+
+  <script>
+    /**
+     * Function to add a task to the to-do list
+     */
+    function addTask() {
+      // Get the input field and its value
+      const input = document.getElementById('taskInput'); // Reference to the input element
+      const task = input.value.trim(); // Get the entered task and remove extra spaces
+
+      // Check if the input is not empty
+      if (task) {
+        // Get the unordered list where tasks are displayed
+        const list = document.getElementById('taskList');
+
+        // Create a new list item (li) for the task
+        const listItem = document.createElement('li');
+
+        // Create a span element to hold the task text
+        const taskText = document.createElement('span');
+        taskText.textContent = task; // Set the text content to the entered task
+
+        // Create a delete button for the task
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'X'; // The text for the button
+        deleteBtn.className = 'delete-btn'; // Assign the delete button styles
+
+        // Add an event listener to the delete button to remove the task
+        deleteBtn.onclick = function () {
+          list.removeChild(listItem); // Remove this task item from the list
+        };
+
+        // Add the task text and delete button to the list item
+        listItem.appendChild(taskText);
+        listItem.appendChild(deleteBtn);
+
+        // Add the list item to the unordered list
+        list.appendChild(listItem);
+
+        // Clear the input field for the next task
+        input.value = '';
+      } else {
+        // Alert the user if they try to add an empty task
+        alert('Please enter a task!');
+      }
+    }
+  </script>
+</body>
+</html>
