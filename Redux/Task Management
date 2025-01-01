@@ -1,0 +1,131 @@
+
+/**Store **/
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./Slices/UserSlices";
+
+const store = configureStore({
+    devTools: true,
+    reducer: {
+        UsersList: userReducer
+    }
+});
+
+export default store;
+
+/**User Slices **/
+
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = [];
+
+const userSlice = createSlice({
+    name: 'UsersList',
+    initialState,
+    reducers: {
+        addUser(state, action) {
+            state.push(action.payload);
+        },
+        deleteUser(state, action) {
+            const deleteIndex = action.payload;
+            return state.filter((user, index) => index !== deleteIndex);
+        }
+    }
+});
+
+export const { addUser, deleteUser } = userSlice.actions;
+export default userSlice.reducer;
+
+
+/**Add Users **/
+import React,{useState} from 'react'
+import {addUser}  from '../Slices/UserSlices'
+import { useDispatch } from 'react-redux'
+
+const AddUser =()=>
+{
+    const[input,setInput]=useState('');
+    const dispatch = useDispatch();
+function handleUser()
+{
+    if(input)
+    {
+        dispatch(addUser(input)) //setInput('');
+    }
+}
+return (
+    <div>
+        <h1>React Redux</h1>
+        <input type ="text"   placeholder ='Enter new User' value ={input}
+        onChange={(e) => {setInput(e.target.value)}} />
+
+        <br />
+        <button onClick={handleUser} id ='Addbutton'>
+            Add New User
+        </button>
+    </div>
+)
+
+}
+export default AddUser;
+
+
+/**View Users **/
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteUser } from '../Slices/UserSlices';
+
+const ViewUser = () => {
+    const usersData = useSelector(state => state.UsersList);
+    const dispatch = useDispatch();
+
+    function handleDeleteUser(index) {
+        dispatch(deleteUser(index));
+    }
+
+    return (
+        <div>
+            <h1>View Users List</h1>
+            {usersData.map((user, index) => (
+                <ul key={index}>
+                    <h2>{user}</h2>
+                    <button onClick={() => handleDeleteUser(index)}>Delete</button>
+                </ul>
+            ))}
+        </div>
+    );
+};
+
+export default ViewUser;
+
+/**Index js **/
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+// import {BrowserRouter} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store'; 
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  
+  <Provider store ={store}>
+    <App/>
+  </Provider>
+
+
+/**App js **/
+import AddUser from './Components/Adduser';
+import ViewUser from './Components/Viewuser';
+import Crud from './CRUDAPP/crud';
+
+function App() {
+    return (
+        <div className="App">
+            <AddUser />
+            <ViewUser />
+            <Crud />
+        </div>
+    );
+}
+
+export default App;
